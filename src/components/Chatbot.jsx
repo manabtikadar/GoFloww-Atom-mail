@@ -61,7 +61,7 @@ const DeciBot = () => {
              style={{ maxHeight: "calc(100vh - 8rem)", height: "auto" }}>
           
           {/* Header */}
-          <div className="flex justify-between items-center p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+          <div className="flex justify-between items-center p-4 sm:p-6 bg-gradient-to-r from-blue-500 to-blue-500 text-white">
             <div className="flex items-center space-x-2 sm:space-x-4">
               <img src={image} alt="deci.bot" className="w-8 h-8 sm:w-12 sm:h-12 rounded-full border-2 border-black" />
               <div>

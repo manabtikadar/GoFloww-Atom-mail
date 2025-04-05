@@ -1,4 +1,8 @@
-from generator import context_reply_chain
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from ContextGenerator import context_reply_chain
 from typing_extensions import TypedDict
 import json
 

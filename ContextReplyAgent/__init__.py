@@ -1,3 +1,3 @@
-from graph import compile_reply_agent
+from .graph import compile_reply_agent
 
 __all__ = ["compile_reply_agent"]

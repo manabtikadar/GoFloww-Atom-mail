@@ -1,10 +1,12 @@
 from typing_extensions import TypedDict
 import json
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from generator import email_refiner_chain
 from grader import refinementGrader_chain
-import os
-import sys
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__),"..")))
 
 class AgentState(TypedDict):
     """Agent state representation."""

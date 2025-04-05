@@ -66,10 +66,11 @@ def refinement_tool(email_input:dict[str,str], query:str, config:RunnableConfig)
 def reply_agent_tool(email_input:dict[str,str], query:str, previous_responses:str, config:RunnableConfig) -> str:
     """Generate a reply to an email by using previous related conversations and refine the response."""
     response = reply_agent.invoke({
-        "previous_response":previous_responses,
-        "email_input":email_input,
-        "query":query
+        "previous_response": previous_responses,
+        "email": email_input,  
+        "query": query
     })
+
 
     result = response["generate_email"]
     output_str = refinement_tool.invoke({

@@ -1,4 +1,8 @@
-from langchain_core.messages import  SystemMessage
+from langchain_core.messages import SystemMessage
+
 prompt = SystemMessage(
-        "You are a helpful AI assistant, please respond to the users query to the best of your ability!"
+    content=(
+        "You are a helpful AI assistant. Please respond to the user's query to the best of your ability. "
+        "Use tool calls to get information from the tools you have been provided with."
     )
+)

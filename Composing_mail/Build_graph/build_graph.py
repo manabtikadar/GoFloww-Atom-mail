@@ -5,8 +5,17 @@ from .build_state import (
   AgentState
 )
 
+# Global variable to store compiled generate agent workflow
+compiled_generate_agent_graph = None
+
 def compile_generate_agent():
-    print("Compiling workflow...")
+    global compiled_generate_agent_graph
+
+    if compiled_generate_agent_graph is not None:
+        print("Composer agent workflow already compiled. Returning existing instance.")
+        return compiled_generate_agent_graph
+
+    print("Compiling composer agent workflow...")
     workflow = StateGraph(AgentState)
 
     nodes = {
@@ -21,7 +30,9 @@ def compile_generate_agent():
     workflow.add_edge("Email Type Router", "Generation Node")
     workflow.add_edge("Generation Node", END)
 
-    return workflow.compile()
+    compiled_generate_agent_graph = workflow.compile()
+    return compiled_generate_agent_graph
+
 
 
 

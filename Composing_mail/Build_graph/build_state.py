@@ -2,7 +2,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from ComposingGenerator import email_generation_chain, EmailOutput
+from ComposingGenerator import email_generation_chain
 from Classifier import email_type_router_chain
 
 from typing_extensions import TypedDict
@@ -17,6 +17,7 @@ class AgentState(TypedDict):
     query: str
     email_type: str
     generate_email: dict[str,str] 
+    context:list[str]
 
 def generate_email(state: AgentState) -> Command:
     """Generate email using the email generation chain."""
@@ -25,14 +26,12 @@ def generate_email(state: AgentState) -> Command:
         "email_type":state["email_type"],
         "email": state["email"],
         "query": state["query"],
+        "context": state["context"]
     })
     
-    response_data = json.loads(result.additional_kwargs['function_call']['arguments'])
-    ordered_output = EmailOutput(**response_data).model_dump()
-
     return {
         **state,
-        "generate_email": ordered_output}
+        "generate_email": result}
 
 def Email_Type_Router(state: AgentState) -> Command:
     """Route email type using the email classifier chain."""

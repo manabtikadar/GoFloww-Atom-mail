@@ -12,17 +12,20 @@ class AgentState(TypedDict):
     query:str
     previous_response:str
     generate_email:dict[str,str]
+    context:list[str]
 
 def reply_generator_state(state:AgentState)->AgentState:
     """Generator function to reply based on previous response the email."""
     email = state["email"]
     query = state["query"]
     previous_response = state["previous_response"]
+    context = state["context"]
 
     response = context_reply_chain.invoke({
         "previous_response":previous_response,
         "email_input":email,
-        "query":query
+        "query":query,
+        "context":context
     })
 
     return {

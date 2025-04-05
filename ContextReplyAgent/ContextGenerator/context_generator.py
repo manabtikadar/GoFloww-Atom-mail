@@ -8,7 +8,7 @@ load_dotenv()
 
 prompt = PromptTemplate(
     template="""
-    You are an expert email assistant. Your job is to generate a professional, clear, and context-aware email **reply** based on the user's current query and prior email conversation.
+    You are an expert email assistant. Your job is to generate a professional, clear, and context-aware email **reply** based on the user's current query , prior email conversation and retrieved context data from documents.
 
     ---
 
@@ -20,6 +20,9 @@ prompt = PromptTemplate(
 
     **User Query / Intention:**
     {query}
+
+    **Retrieved Coontext:**
+    {context}
 
     ---
 
@@ -39,7 +42,7 @@ prompt = PromptTemplate(
     "Body": "<LLM-generated professional reply>"
     }}
     """,
-    input_variables=["previous_response","email_input","query"]
+    input_variables=["previous_response","email_input","query","context"]
 )
 
 llm = ChatGoogleGenerativeAI(

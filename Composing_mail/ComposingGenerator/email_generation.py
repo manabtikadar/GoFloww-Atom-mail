@@ -1,17 +1,13 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from pydantic import BaseModel, Field
+from langchain_core.runnables import RunnableLambda
 from dotenv import load_dotenv
 import os
 load_dotenv()
 
-class EmailOutput(BaseModel):
-    From: str = Field(description="Sender's email address")
-    To: str = Field(description="Recipient's email address")
-    Subject: str = Field(description="Email subject")
-    Body: str = Field(description="Generated email content")
 
+# Prompt Template
 template = """
 You are an expert **{email_type} Email Assistant**. Your task is to generate a well-structured and professional email body based on the provided details.
 
@@ -23,6 +19,8 @@ You are an expert **{email_type} Email Assistant**. Your task is to generate a w
 ### **User Query**
 {query}
 
+### **Contextual Information:**
+{context}
 ---
 
 ## **Task:**
@@ -37,24 +35,30 @@ You are an expert **{email_type} Email Assistant**. Your task is to generate a w
     - Maintain a professional tone suitable for the given email type.
     - Avoid predefined templates; generate a fresh response based on context.
     - Ensure the response is well-structured and relevant.
+
+Respond strictly in the following JSON format:
+{{
+  "From": "<sender email>",
+  "To": "<receiver email>",
+  "Subject": "<email subject>",
+  "Body": "<well-structured email content>"
+}}
 """
 
 prompt = PromptTemplate(
     template=template,
-    input_variables=["email_type", "email", "query"]
+    input_variables=["email_type", "email", "query", "context"]
 )
 
 structured_llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash",
-    temperature=0, 
+    temperature=0,
     google_api_key=os.getenv("COMPOSER_GOOGLE_API_KEY")
-    ).bind_tools(
-        tools=[EmailOutput]
 )
 
-
+# Full email generation chain
 email_generation_chain = (
     prompt
     | structured_llm
+    | JsonOutputParser()
 )
-

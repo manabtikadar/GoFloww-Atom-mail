@@ -5,8 +5,17 @@ from .build_state import (
 )
 from langgraph.graph import START, StateGraph, END
 
+# Global variable to store the compiled refinement agent workflow
+compiled_refinement_agent_graph = None
+
 def compile_refinement_agent():
-    print("Compiling workflow...")
+    global compiled_refinement_agent_graph
+
+    if compiled_refinement_agent_graph is not None:
+        print("Refinement agent workflow already compiled. Returning existing instance.")
+        return compiled_refinement_agent_graph
+
+    print("Compiling refinement agent workflow...")
     workflow = StateGraph(AgentState)
 
     nodes = {
@@ -21,4 +30,5 @@ def compile_refinement_agent():
     workflow.add_edge("Refinement Grader", "Refined Email Generate")
     workflow.add_edge("Refined Email Generate", END)
 
-    return workflow.compile()
+    compiled_refinement_agent_graph = workflow.compile()
+    return compiled_refinement_agent_graph
